@@ -17,7 +17,7 @@ public class SubscriptionPackage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+private Integer topOffersAllowed; // Top offers allowed
     private String name; // e.g., "Basic", "Premium", "Enterprise"
     private String description;
     

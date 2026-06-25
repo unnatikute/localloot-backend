@@ -19,7 +19,7 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String shopName;
     private String ownerName;
     private String email;
@@ -31,17 +31,18 @@ public class Shop {
     private String registrationStatus; // APPROVED, PENDING, REJECTED
     private LocalDateTime registrationDate;
     private LocalDateTime createdAt;
-    
+
     @ManyToOne
     @JoinColumn(name = "shopkeeper_id")
     private User shopkeeper;
-    
+
     // Document fields
     private String shopRegistrationDoc;
     private String gstDoc;
     private String ownerIdDoc;
     private String addressProofDoc;
-    
+    private String description;
+private String documentUrl;
     @PrePersist
     public void prePersist() {
         if (this.createdAt == null) {

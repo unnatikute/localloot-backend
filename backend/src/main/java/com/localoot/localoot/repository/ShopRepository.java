@@ -20,4 +20,5 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
     @Query(value = "SELECT DATE_FORMAT(registration_date, '%Y-%m') as month, COUNT(*) as count " +
                    "FROM shops GROUP BY month ORDER BY month DESC", nativeQuery = true)
     List<Object[]> getShopsRegisteredByMonth();
+List<Shop> findByShopkeeper_Id(Long id);
 }
