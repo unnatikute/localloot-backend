@@ -6,6 +6,7 @@ import AnalyticsTab from "../components/AdminAnalyticsTab";
 import { ClipboardCheck, Star, Store, Users, BarChart3 } from "lucide-react";
 import { getOfferImage, DEFAULT_IMAGES } from "../utils/images.js";
 import SafeImage from "../components/SafeImage.jsx";
+import { useApi } from "../api/client";
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("offers");
