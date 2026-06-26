@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useApi } from "../api/client";
 import axios from "axios";
 import { Search, Download, Check, X, Eye } from "lucide-react";
 
 export default function ShopsManagement() {
+  const api = useApi();
   const [shops, setShops] = useState([]);
   const [filteredShops, setFilteredShops] = useState([]);
   const [search, setSearch] = useState("");
@@ -26,7 +28,7 @@ export default function ShopsManagement() {
 
   const fetchShops = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/shops");
+      const response = await api.get("/admin/shops");
       setShops(response.data);
       setLoading(false);
     } catch (error) {
@@ -37,7 +39,7 @@ export default function ShopsManagement() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/shops/stats");
+      const response = await api.get("/admin/shops/stats");
       setStats(response.data);
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -46,7 +48,7 @@ export default function ShopsManagement() {
 
   const fetchMonthlyStats = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/shops/by-month");
+      const response = await api.get("/admin/shops/by-month");
       setMonthlyStats(response.data);
     } catch (error) {
       console.error("Error fetching monthly stats:", error);
@@ -85,7 +87,7 @@ export default function ShopsManagement() {
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`http://localhost:8080/api/admin/shops/${id}/approve`);
+      await api.put(`/admin/shops/${id}/approve`);
       alert("Shop approved successfully!");
       fetchShops();
       fetchStats();
@@ -96,7 +98,7 @@ export default function ShopsManagement() {
 
   const handleReject = async (id) => {
     try {
-      await axios.put(`http://localhost:8080/api/admin/shops/${id}/reject`);
+      await api.put(`/admin/shops/${id}/reject`);
       alert("Shop rejected!");
       fetchShops();
       fetchStats();

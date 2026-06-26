@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useApi } from "../api/client";
 import { Search, Eye, Trash2, MapPin, ShoppingBag, History, FileText, X } from "lucide-react";
 
 export default function UsersManagement() {
+  const api = useApi();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -75,7 +77,7 @@ export default function UsersManagement() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/users");
+      const response = await api.get("/admin/users")
       setUsers(response.data);
       setLoading(false);
     } catch (error) {
@@ -86,7 +88,7 @@ export default function UsersManagement() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/users/stats");
+      const response = await  api.get("/admin/users/stats");
       setStats(response.data);
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -96,7 +98,7 @@ export default function UsersManagement() {
   const fetchUserDetails = async (userId) => {
     setLoadingDetails(true);
     try {
-      const response = await axios.get(`http://localhost:8080/api/admin/users/${userId}`);
+      const response = await api.get("/admin/users/stats");
       setUserDetails(response.data);
       setDetailsTab("overview");
     } catch (error) {

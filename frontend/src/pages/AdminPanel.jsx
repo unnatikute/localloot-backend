@@ -13,11 +13,11 @@ const AdminPanel = () => {
   const [approvedWithPlan, setApprovedWithPlan] = useState([]);
   const [topSelectedIds, setTopSelectedIds] = useState([]);
 
+  const api = useApi();
   // ---------------- FETCH ----------------
   const fetchPending = async () => {
-    const res = await axios.get(
-      "http://localhost:8080/api/admin/offers/pending",
-    );
+    const res = await api.get("/admin/offers/pending");
+    
     setPendingOffers(res.data || []);
   };
 

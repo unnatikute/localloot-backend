@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { BarChart3, TrendingUp, Users, ShoppingBag, MessageCircle } from "lucide-react";
+import { useApi } from "../api/client";
+import {
+  BarChart3,
+  TrendingUp,
+  Users,
+  ShoppingBag,
+  MessageCircle,
+} from "lucide-react";
 
 export default function AnalyticsTab() {
+  const api = useApi();
   const [analytics, setAnalytics] = useState(null);
   const [engagement, setEngagement] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +22,7 @@ export default function AnalyticsTab() {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/analytics");
+      const response = await api.get("/admin/analytics");
       setAnalytics(response.data);
       setLoading(false);
     } catch (error) {
@@ -25,7 +33,7 @@ export default function AnalyticsTab() {
 
   const fetchEngagement = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/admin/analytics/engagement");
+      const response = await api.get("/admin/analytics/engagement");
       setEngagement(response.data);
     } catch (error) {
       console.error("Error fetching engagement:", error);
@@ -33,7 +41,11 @@ export default function AnalyticsTab() {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-96">Loading analytics...</div>;
+    return (
+      <div className="flex justify-center items-center h-96">
+        Loading analytics...
+      </div>
+    );
   }
 
   return (
@@ -44,7 +56,9 @@ export default function AnalyticsTab() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold opacity-90">Total Users</h3>
-              <p className="text-3xl font-bold mt-2">{analytics?.totalUsers || 0}</p>
+              <p className="text-3xl font-bold mt-2">
+                {analytics?.totalUsers || 0}
+              </p>
             </div>
             <Users className="w-12 h-12 opacity-30" />
           </div>
@@ -54,7 +68,9 @@ export default function AnalyticsTab() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold opacity-90">Total Shops</h3>
-              <p className="text-3xl font-bold mt-2">{analytics?.totalShops || 0}</p>
+              <p className="text-3xl font-bold mt-2">
+                {analytics?.totalShops || 0}
+              </p>
             </div>
             <ShoppingBag className="w-12 h-12 opacity-30" />
           </div>
@@ -64,7 +80,9 @@ export default function AnalyticsTab() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold opacity-90">Total Offers</h3>
-              <p className="text-3xl font-bold mt-2">{analytics?.totalOffers || 0}</p>
+              <p className="text-3xl font-bold mt-2">
+                {analytics?.totalOffers || 0}
+              </p>
             </div>
             <TrendingUp className="w-12 h-12 opacity-30" />
           </div>
@@ -73,10 +91,12 @@ export default function AnalyticsTab() {
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-lg shadow-lg">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-semibold opacity-90">Pending Approvals</h3>
+              <h3 className="text-sm font-semibold opacity-90">
+                Pending Approvals
+              </h3>
               <p className="text-3xl font-bold mt-2">
-                {(analytics?.offersByStatus?.pending || 0) + 
-                 (analytics?.shopsByStatus?.pending || 0)}
+                {(analytics?.offersByStatus?.pending || 0) +
+                  (analytics?.shopsByStatus?.pending || 0)}
               </p>
             </div>
             <MessageCircle className="w-12 h-12 opacity-30" />
@@ -100,7 +120,9 @@ export default function AnalyticsTab() {
           <p className="text-3xl font-bold mt-2 text-green-700">
             ₹{Math.round(analytics?.revenue?.last30Days || 0)}
           </p>
-          <p className="text-xs text-gray-500 mt-1">Payments marked COMPLETED</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Payments marked COMPLETED
+          </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
           <p className="text-sm text-gray-600">Total Revenue</p>
@@ -142,7 +164,9 @@ export default function AnalyticsTab() {
             </div>
             <div className="flex items-center justify-between p-4 bg-purple-50 rounded-lg border border-purple-200">
               <div>
-                <p className="text-sm text-gray-600">Active Users (Engagement)</p>
+                <p className="text-sm text-gray-600">
+                  Active Users (Engagement)
+                </p>
                 <p className="text-2xl font-bold text-purple-600">
                   {engagement?.activeUsers || 0}
                 </p>
@@ -199,7 +223,9 @@ export default function AnalyticsTab() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
             <p className="text-sm text-gray-600 mb-2">Total Offers</p>
-            <p className="text-3xl font-bold text-purple-600">{analytics?.totalOffers || 0}</p>
+            <p className="text-3xl font-bold text-purple-600">
+              {analytics?.totalOffers || 0}
+            </p>
           </div>
           <div className="p-4 bg-green-50 rounded-lg border border-green-200">
             <p className="text-sm text-gray-600 mb-2">Approved Offers</p>
@@ -256,7 +282,9 @@ export default function AnalyticsTab() {
 
       {/* Summary Section */}
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg shadow-md border border-indigo-200">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Platform Summary</h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-4">
+          Platform Summary
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-gray-600 mb-2">🎯 Platform Growth</p>
@@ -267,11 +295,17 @@ export default function AnalyticsTab() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                <span>{analytics?.shopsByStatus?.approved || 0} approved shops operational</span>
+                <span>
+                  {analytics?.shopsByStatus?.approved || 0} approved shops
+                  operational
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-purple-600 rounded-full"></span>
-                <span>{analytics?.offersByStatus?.approved || 0} active offers for customers</span>
+                <span>
+                  {analytics?.offersByStatus?.approved || 0} active offers for
+                  customers
+                </span>
               </li>
             </ul>
           </div>
@@ -280,15 +314,24 @@ export default function AnalyticsTab() {
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-yellow-600 rounded-full"></span>
-                <span>{analytics?.shopsByStatus?.pending || 0} shop registrations awaiting approval</span>
+                <span>
+                  {analytics?.shopsByStatus?.pending || 0} shop registrations
+                  awaiting approval
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-orange-600 rounded-full"></span>
-                <span>{analytics?.offersByStatus?.pending || 0} offers pending review</span>
+                <span>
+                  {analytics?.offersByStatus?.pending || 0} offers pending
+                  review
+                </span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-red-600 rounded-full"></span>
-                <span>Rejection count: {analytics?.shopsByStatus?.rejected || 0} shops</span>
+                <span>
+                  Rejection count: {analytics?.shopsByStatus?.rejected || 0}{" "}
+                  shops
+                </span>
               </li>
             </ul>
           </div>
@@ -297,7 +340,10 @@ export default function AnalyticsTab() {
 
       {/* Last Update */}
       <div className="text-center text-sm text-gray-600 mt-4">
-        Last updated: {analytics?.generatedAt ? new Date(analytics.generatedAt).toLocaleString() : 'N/A'}
+        Last updated:{" "}
+        {analytics?.generatedAt
+          ? new Date(analytics.generatedAt).toLocaleString()
+          : "N/A"}
       </div>
     </div>
   );
