@@ -30,7 +30,7 @@ const AdminPanel = () => {
   // };
 
   const fetchTop = async () => {
-    const res = await axios.get("http://localhost:8080/api/offers/top");
+    const res = await api.get("/offers/top");
     setTopSelectedIds(res.data.map((o) => o.id));
   };
 
@@ -47,18 +47,16 @@ const AdminPanel = () => {
 
   // ---------------- ACTIONS ----------------
   const handleApprove = async (id) => {
-    await axios.put(`http://localhost:8080/api/admin/offers/${id}/approve`);
+    await  api.put(`/admin/offers/${id}/approve`);
     fetchPending();
   };
 
   const handleReject = async (id) => {
-    await axios.put(`http://localhost:8080/api/admin/offers/${id}/reject`);
+    await api.put(`/admin/offers/${id}/reject`);
     fetchPending();
   };
   const fetchApprovedWithPlan = async () => {
-    const res = await axios.get(
-      "http://localhost:8080/api/admin/offers/approved-with-plan",
-    );
+   const res = await api.get("/admin/offers/approved-with-plan");
     setApprovedWithPlan(res.data || []);
   };
 
@@ -77,10 +75,7 @@ const AdminPanel = () => {
   };
 
   const saveTop = async () => {
-    await axios.put(
-      "http://localhost:8080/api/offers/admin/top5",
-      topSelectedIds,
-    );
+   await api.put("/offers/admin/top5", topSelectedIds);
 
     alert("Top offers updated");
     fetchTop();
