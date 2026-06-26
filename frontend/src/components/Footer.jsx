@@ -1,5 +1,15 @@
-import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Link } from "react-router-dom";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+  Heart,
+} from "lucide-react";
+import MyBookmarks from "./../pages/MyBookmarks";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,22 +22,39 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="sm:col-span-2 md:col-span-1 transform hover:scale-105 transition-all duration-300">
             <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2 md:mb-3 hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300">
-              Local<span className="text-yellow-300 hover:text-yellow-200 transition-colors">Loot</span>
+              Local
+              <span className="text-yellow-300 hover:text-yellow-200 transition-colors">
+                Loot
+              </span>
             </h3>
             <p className="text-sm text-gray-400 leading-relaxed mb-3 hover:text-gray-300 transition-colors">
-              Discover the best local offers and deals in your area. Your one-stop destination for authentic local businesses and amazing discounts.
+              Discover the best local offers and deals in your area. Your
+              one-stop destination for authentic local businesses and amazing
+              discounts.
             </p>
             <div className="flex gap-3 mb-3 md:mb-0">
-              <a href="#" className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl">
+              <a
+                href="#"
+                className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl"
+              >
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="bg-sky-500 hover:bg-sky-600 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl">
+              <a
+                href="#"
+                className="bg-sky-500 hover:bg-sky-600 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl"
+              >
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="#" className="bg-pink-600 hover:bg-pink-700 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl">
+              <a
+                href="#"
+                className="bg-pink-600 hover:bg-pink-700 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl"
+              >
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl">
+              <a
+                href="#"
+                className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-lg transition-all duration-300 transform hover:scale-125 hover:rotate-12 shadow-lg hover:shadow-xl"
+              >
                 <Linkedin className="w-4 h-4" />
               </a>
             </div>
@@ -36,27 +63,54 @@ export default function Footer() {
           {/* Quick Links */}
           <div className="transform hover:scale-105 transition-all duration-300 hover:translate-x-1">
             <h4 className="text-white font-bold mb-4 text-lg flex items-center gap-2 group">
-              <span className="text-blue-400 group-hover:rotate-180 transition-transform duration-500">🔗</span> Quick Links
+              <span className="text-blue-400 group-hover:rotate-180 transition-transform duration-500">
+                🔗
+              </span>{" "}
+              Quick Links
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span> Home
+                <Link
+                  to="/"
+                  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    →
+                  </span>{" "}
+                  Home
                 </Link>
               </li>
               <li>
-                <Link to="/categories" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span> Categories
+                <Link
+                  to="/categories"
+                  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    →
+                  </span>{" "}
+                  Categories
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span> Contact Us
+                <Link
+                  to="/contact"
+                  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    →
+                  </span>{" "}
+                  Contact Us
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span> About Us
+                <Link
+                  to="/about"
+                  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    →
+                  </span>{" "}
+                  About Us
                 </Link>
               </li>
             </ul>
@@ -65,27 +119,42 @@ export default function Footer() {
           {/* My Account */}
           <div className="transform hover:scale-105 transition-all duration-300 hover:translate-x-1">
             <h4 className="text-white font-bold mb-4 text-lg flex items-center gap-2 group">
-              <span className="text-purple-400 group-hover:scale-125 transition-transform duration-300">👤</span> My Account
+              <span className="text-purple-400 group-hover:scale-125 transition-transform duration-300">
+                👤
+              </span>{" "}
+              My Account
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/mylikes" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:scale-125 transition-transform duration-300">❤️</span> My Likes
-                </Link>
+                <Link
+  to="/mylikes"
+  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+>
+  <span className="group-hover:scale-125 transition-transform duration-300">
+    ❤️
+  </span>{" "}
+  My Likes
+</Link>
+
+<Link
+  to="/mybookmarks"
+  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+>
+  <span className="group-hover:scale-125 transition-transform duration-300">
+    🔖
+  </span>{" "}
+  My Bookmarks
+</Link>
               </li>
               <li>
-                <Link to="/mybookmarks" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:scale-125 transition-transform duration-300">🔖</span> My Bookmarks
-                </Link>
-              </li>
-              <li>
-                <Link to="/savedshops" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:scale-125 transition-transform duration-300">🏪</span> Saved Shops
-                </Link>
-              </li>
-              <li>
-                <Link to="/shop-dashboard" className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group">
-                  <span className="group-hover:scale-125 transition-transform duration-300">📊</span> Dashboard
+                <Link
+                  to="/shop-dashboard"
+                  className="text-gray-400 hover:text-yellow-300 transition-all duration-300 font-medium flex items-center gap-2 group"
+                >
+                  <span className="group-hover:scale-125 transition-transform duration-300">
+                    📊
+                  </span>{" "}
+                  Dashboard
                 </Link>
               </li>
             </ul>
@@ -94,14 +163,20 @@ export default function Footer() {
           {/* Connect Section */}
           <div className="transform hover:scale-105 transition-all duration-300 hover:translate-x-1">
             <h4 className="text-white font-bold mb-4 text-lg flex items-center gap-2 group">
-              <span className="text-green-400 group-hover:scale-125 transition-transform duration-300">📞</span> Connect With Us
+              <span className="text-green-400 group-hover:scale-125 transition-transform duration-300">
+                📞
+              </span>{" "}
+              Connect With Us
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 group cursor-pointer hover:translate-x-1 transition-all duration-300">
                 <Mail className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0 group-hover:rotate-12 transition-transform duration-300" />
                 <div>
                   <p className="text-xs text-gray-500">Email</p>
-                  <a href="mailto:support@localloot.com" className="text-gray-300 hover:text-yellow-300 transition-colors font-medium">
+                  <a
+                    href="mailto:support@localloot.com"
+                    className="text-gray-300 hover:text-yellow-300 transition-colors font-medium"
+                  >
                     support@localloot.com
                   </a>
                 </div>
@@ -110,7 +185,10 @@ export default function Footer() {
                 <Phone className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
                 <div>
                   <p className="text-xs text-gray-500">Phone</p>
-                  <a href="tel:+919876543210" className="text-gray-300 hover:text-yellow-300 transition-colors font-medium">
+                  <a
+                    href="tel:+919876543210"
+                    className="text-gray-300 hover:text-yellow-300 transition-colors font-medium"
+                  >
                     +91 98765 43210
                   </a>
                 </div>
@@ -119,7 +197,9 @@ export default function Footer() {
                 <MapPin className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
                 <div>
                   <p className="text-xs text-gray-500">Location</p>
-                  <p className="text-gray-300 font-medium group-hover:text-yellow-300 transition-colors">Pune, Maharashtra, India</p>
+                  <p className="text-gray-300 font-medium group-hover:text-yellow-300 transition-colors">
+                    Pune, Maharashtra, India
+                  </p>
                 </div>
               </li>
             </ul>
@@ -128,9 +208,12 @@ export default function Footer() {
           {/* Newsletter */}
           <div className="sm:col-span-2 md:col-span-1 transform hover:scale-105 transition-all duration-300">
             <h4 className="text-white font-bold mb-4 text-lg flex items-center gap-2 group">
-              <span className="text-red-400 group-hover:animate-pulse">📧</span> Newsletter
+              <span className="text-red-400 group-hover:animate-pulse">📧</span>{" "}
+              Newsletter
             </h4>
-            <p className="text-sm text-gray-400 mb-3 hover:text-gray-300 transition-colors">Subscribe to get exclusive deals and updates!</p>
+            <p className="text-sm text-gray-400 mb-3 hover:text-gray-300 transition-colors">
+              Subscribe to get exclusive deals and updates!
+            </p>
             <div className="flex flex-col gap-2">
               <input
                 type="email"
@@ -146,14 +229,19 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="border-t border-gray-700 pt-4 md:pt-6">
-
           {/* Copyright */}
           <div className="text-center pt-4 md:pt-6 border-t border-gray-700 transform hover:scale-105 transition-all duration-300">
             <p className="text-gray-400 text-sm mb-2 hover:text-gray-300 transition-colors">
-              © {currentYear} <span className="font-bold text-transparent bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300">LocalLoot</span>. All rights reserved.
+              © {currentYear}{" "}
+              <span className="font-bold text-transparent bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text hover:from-yellow-300 hover:to-yellow-400 transition-all duration-300">
+                LocalLoot
+              </span>
+              . All rights reserved.
             </p>
             <p className="text-gray-500 text-xs flex items-center justify-center gap-1 flex-wrap hover:text-gray-400 transition-colors">
-              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" /> in Pune, India 🇮🇳
+              Made with{" "}
+              <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />{" "}
+              in Pune, India 🇮🇳
             </p>
           </div>
         </div>
@@ -178,4 +266,3 @@ export default function Footer() {
     </footer>
   );
 }
-

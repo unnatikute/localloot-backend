@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import { Star, MapPin, Heart, Share2 } from 'lucide-react';
 import { useApi } from '../api/client';
 import { useStats } from '../store/stats';
+import { DEFAULT_IMAGES } from '../utils/images.js';
+import SafeImage from './SafeImage.jsx';
 
 // Demo data for shops
 const DEMO_SHOPS = [
   {
     id: 1,
     name: 'Pizza Palace',
-    logo: 'https://images.unsplash.com/photo-1555939594-58d7cb561cea?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg',
     area: 'Downtown',
     rating: 4.5,
     reviews_count: 128,
@@ -21,7 +23,7 @@ const DEMO_SHOPS = [
   {
     id: 2,
     name: 'Fashion Fiesta',
-    logo: 'https://images.unsplash.com/photo-1506755855726-8ab0a63a4a1c?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg',
     area: 'Mall Road',
     rating: 4.8,
     reviews_count: 256,
@@ -33,7 +35,7 @@ const DEMO_SHOPS = [
   {
     id: 3,
     name: 'Coffee Brew Co.',
-    logo: 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg',
     area: 'City Center',
     rating: 4.6,
     reviews_count: 189,
@@ -45,7 +47,7 @@ const DEMO_SHOPS = [
   {
     id: 4,
     name: 'Tech Hub',
-    logo: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg',
     area: 'Tech Park',
     rating: 4.7,
     reviews_count: 342,
@@ -57,7 +59,7 @@ const DEMO_SHOPS = [
   {
     id: 5,
     name: 'Serenity Spa',
-    logo: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/3997989/pexels-photo-3997989.jpeg',
     area: 'Wellness Zone',
     rating: 4.9,
     reviews_count: 217,
@@ -69,7 +71,7 @@ const DEMO_SHOPS = [
   {
     id: 6,
     name: 'Burger House',
-    logo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg',
     area: 'Food Court',
     rating: 4.4,
     reviews_count: 145,
@@ -81,7 +83,7 @@ const DEMO_SHOPS = [
   {
     id: 7,
     name: 'Beauty Corner',
-    logo: 'https://images.unsplash.com/photo-1564870841619-06d33f8e8fcd?q=80&w=200&auto=format&fit=crop',
+    logo: 'https://images.pexels.com/photos/2113855/pexels-photo-2113855.jpeg',
     area: 'Market Street',
     rating: 4.3,
     reviews_count: 98,
@@ -92,8 +94,8 @@ const DEMO_SHOPS = [
   },
   {
     id: 8,
-    name: 'BookwormCafe',
-    logo: 'https://images.unsplash.com/photo-1507842217343-583f20270319?q=80&w=200&auto=format&fit=crop',
+    name: 'Bookworm Cafe',
+    logo: 'https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg',
     area: 'Literature Hub',
     rating: 4.7,
     reviews_count: 176,
@@ -148,9 +150,10 @@ export default function ShopGrid() {
           {/* Shop Image */}
           <div className="relative h-48 bg-gray-100 overflow-hidden">
             <Link to={`/shops/${shop.id}`} state={{ shop }} className="block h-full">
-              <img
-                src={shop.logo || shop.image_url || shop.shopImage || 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(shop.name || shop.shopName)}
+              <SafeImage
+                src={shop?.logo || shop?.image_url || shop?.shopImage || shop?.imageUrl}
                 alt={shop.name || shop.shopName}
+                fallback={DEFAULT_IMAGES.shop}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
               />
             </Link>
@@ -242,17 +245,9 @@ export default function ShopGrid() {
                 state={{ shop }}
                 className="flex-1 px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition text-sm text-center"
               >
-                View Offers
+                View Shops
               </Link>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-              >
-                <Share2 className="w-4 h-4 text-gray-600" />
-              </button>
+             
             </div>
           </div>
         </div>

@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { useApi } from '../api/client';
 import { useStats } from '../store/stats';
 import OfferCard from './OfferCard';
+import { normalizeOffer } from '../utils/images.js';
 
 const DEMO_OFFERS = [
   {
     id: 1,
     title: '50% OFF on All Pizzas',
     description: 'Fresh Italian pizzas with premium ingredients and toppings',
-    image_url: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=400&auto=format&fit=crop',
+    image_url: 'https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg',
     discount: 50,
     price: 499,
     is_trending: true,
@@ -18,7 +19,7 @@ const DEMO_OFFERS = [
     shop: {
       id: 1,
       name: 'Pizza Palace',
-      logo: 'https://images.unsplash.com/photo-1555939594-58d7cb561cea?q=80&w=50&auto=format&fit=crop',
+      logo: 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg',
       area: 'Downtown',
     },
   },
@@ -26,7 +27,7 @@ const DEMO_OFFERS = [
     id: 2,
     title: 'Flat 60% OFF Designer Dresses',
     description: 'Exclusive collection of designer dresses - Latest fashion trends',
-    image_url: 'https://images.unsplash.com/photo-1595777712802-66d0c38e90a1?q=80&w=400&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=400&auto=format&fit=crop',
     discount: 60,
     price: 2999,
     is_trending: true,
@@ -36,7 +37,7 @@ const DEMO_OFFERS = [
     shop: {
       id: 2,
       name: 'Fashion Fiesta',
-      logo: 'https://images.unsplash.com/photo-1506755855726-8ab0a63a4a1c?q=80&w=50&auto=format&fit=crop',
+      logo: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=50&auto=format&fit=crop',
       area: 'Mall Road',
     },
   },
@@ -44,7 +45,7 @@ const DEMO_OFFERS = [
     id: 3,
     title: 'Buy 1 Get 1 FREE on Coffee',
     description: 'Hot & fresh coffee with free pastries - Limited time offer',
-    image_url: 'https://images.unsplash.com/photo-1559056199-641a0ac8b3f4?q=80&w=400&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=400&auto=format&fit=crop',
     discount: 50,
     price: 150,
     is_trending: true,
@@ -54,7 +55,7 @@ const DEMO_OFFERS = [
     shop: {
       id: 3,
       name: 'Coffee Brew Co.',
-      logo: 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=50&auto=format&fit=crop',
+      logo: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=50&auto=format&fit=crop',
       area: 'City Center',
     },
   },
@@ -80,7 +81,7 @@ const DEMO_OFFERS = [
     id: 5,
     title: 'Spa Package - Upto 70% OFF',
     description: 'Complete spa package - massage, facial & body care treatments',
-    image_url: 'https://images.unsplash.com/photo-1544161515-81205f8991e2?q=80&w=400&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=400&auto=format&fit=crop',
     discount: 70,
     price: 1999,
     is_trending: true,
@@ -90,7 +91,7 @@ const DEMO_OFFERS = [
     shop: {
       id: 5,
       name: 'Serenity Spa',
-      logo: 'https://images.unsplash.com/photo-1576091160550-112173f7f869?q=80&w=50&auto=format&fit=crop',
+      logo: 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=50&auto=format&fit=crop',
       area: 'Wellness Zone',
     },
   },
@@ -125,17 +126,25 @@ export default function OffersGrid() {
         const response = await api.get('/offers?limit=12');
         if (response.data && (response.data.offers || response.data.length > 0)) {
           const raw = response.data.offers || response.data;
-          const normalized = raw.map((o) => ({
-            ...o,
-            image_url: o.image_url || o.imageUrl,
-            discount: o.discount || (o.originalPrice && o.price
-              ? Math.round(((o.originalPrice - o.price) / o.originalPrice) * 100)
-              : null),
-            price: o.price || null,
-            shop: o.shop || (o.shopName
-              ? { id: o.shopId || null, name: o.shopName, area: o.area }
-              : o.shop),
-          }));
+          const normalized = raw.map((o, index) =>
+            normalizeOffer({
+              ...o,
+              image_url: o.image_url || DEMO_OFFERS[index % DEMO_OFFERS.length].image_url,
+              discount:
+                o.discount ||
+                (o.originalPrice && o.price
+                  ? Math.round(((o.originalPrice - o.price) / o.originalPrice) * 100)
+                  : DEMO_OFFERS[index % DEMO_OFFERS.length].discount),
+              price: o.price || DEMO_OFFERS[index % DEMO_OFFERS.length].price,
+              shop:
+                o.shop || {
+                  ...DEMO_OFFERS[index % DEMO_OFFERS.length].shop,
+                  id: o.shopId || null,
+                  name: o.shopName || DEMO_OFFERS[index % DEMO_OFFERS.length].shop.name,
+                  area: o.area || DEMO_OFFERS[index % DEMO_OFFERS.length].shop.area,
+                },
+            })
+          );
           setOffers(normalized);
         }
       } catch (error) {

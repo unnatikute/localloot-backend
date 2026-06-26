@@ -3,6 +3,8 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../store/auth.jsx';
 import { createApi } from '../api/client.js';
 import { useStats } from '../store/stats.jsx';
+import { getShopImage, DEFAULT_IMAGES } from '../utils/images.js';
+import SafeImage from '../components/SafeImage.jsx';
 
 export default function ShopDetail() {
   const { shopId } = useParams();
@@ -72,16 +74,15 @@ export default function ShopDetail() {
     );
   }
 
-  return (
+ return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="flex flex-col md:flex-row gap-6 p-6">
-        {(shop.image_url || shop.logo || shop.shopImage) && (
-          <img
-            src={shop.image_url || shop.logo || shop.shopImage}
-            alt={shop.name || shop.shopName}
-            className="w-full md:w-64 h-64 object-cover rounded-lg"
-          />
-        )}
+        <SafeImage
+          src={shop?.image_url || shop?.logo || shop?.shopImage || shop?.imageUrl}
+          alt={shop.name || shop.shopName}
+          fallback={DEFAULT_IMAGES.shop}
+          className="w-full md:w-64 h-64 object-cover rounded-lg"
+        />
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900">{shop.name || shop.shopName}</h1>
           <p className="text-gray-700 mt-1">{shop.description}</p>

@@ -35,7 +35,7 @@ export default function App() {
         <div className="min-h-screen flex flex-col bg-gray-50">
           <Navbar />
 
-        <main className="flex-1 max-w-7xl mx-auto px-4 py-6 w-full">
+          <main className="flex-1 max-w-7xl mx-auto px-4 py-6 w-full">
             <Routes>
               {/* PUBLIC */}
               <Route path="/" element={<Home />} />
@@ -43,20 +43,22 @@ export default function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-    <Route
-     path="/register-shop" 
-     element={
-       <ProtectedRoute allowedRoles={["SHOPKEEPER"]}>
-     <RegisterShop />
-     </ProtectedRoute>
-     }
-     />
+              <Route
+                path="/register-shop"
+                element={
+                  <ProtectedRoute allowedRoles={["SHOPKEEPER"]}>
+                    <RegisterShop />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* USER */}
               <Route
                 path="/categories"
                 element={
-                  <ProtectedRoute allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}>
+                  <ProtectedRoute
+                    allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}
+                  >
                     <Categories />
                   </ProtectedRoute>
                 }
@@ -65,7 +67,9 @@ export default function App() {
               <Route
                 path="/offers/:offerId"
                 element={
-                  <ProtectedRoute allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}>
+                  <ProtectedRoute
+                    allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}
+                  >
                     <OfferDetail />
                   </ProtectedRoute>
                 }
@@ -74,7 +78,9 @@ export default function App() {
               <Route
                 path="/shops/:shopId"
                 element={
-                  <ProtectedRoute allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}>
+                  <ProtectedRoute
+                    allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}
+                  >
                     <ShopDetail />
                   </ProtectedRoute>
                 }
@@ -83,7 +89,7 @@ export default function App() {
               <Route
                 path="/mylikes"
                 element={
-                  <ProtectedRoute allowedRoles={["USER"]}>
+                  <ProtectedRoute allowedRoles={["USER", "SHOPKEEPER"]}>
                     <MyLikes />
                   </ProtectedRoute>
                 }
@@ -92,7 +98,7 @@ export default function App() {
               <Route
                 path="/mybookmarks"
                 element={
-                  <ProtectedRoute allowedRoles={["USER"]}>
+                  <ProtectedRoute allowedRoles={["USER", "SHOPKEEPER"]}>
                     <MyBookmarks />
                   </ProtectedRoute>
                 }
@@ -101,7 +107,9 @@ export default function App() {
               <Route
                 path="/savedshops"
                 element={
-                  <ProtectedRoute allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}>
+                  <ProtectedRoute
+                    allowedRoles={["USER", "SHOPKEEPER", "ADMIN"]}
+                  >
                     <SavedShops />
                   </ProtectedRoute>
                 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const RegisterShop = () => {
@@ -14,6 +14,25 @@ const RegisterShop = () => {
   });
 
   const [document, setDocument] = useState(null);
+
+  // ✅ NEW STATES
+  const [existingShop, setExistingShop] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ CHECK IF SHOP EXISTS
+  useEffect(() => {
+    if (user?.id) {
+      axios
+        .get(`http://localhost:8080/api/shops/by-user/${user.id}`)
+        .then((res) => {
+          if (res.data.length > 0) {
+            setExistingShop(res.data[0]);
+          }
+        })
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    }
+  }, [user?.id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,35 +53,68 @@ const RegisterShop = () => {
         description: form.description,
         mobileNumber: form.phone,
         email: form.email,
-        // ❌ REMOVE shopkeeper from here
       };
 
       const formData = new FormData();
-
       formData.append("shop", JSON.stringify(data));
-
-      // ✅ ADD THIS LINE (MOST IMPORTANT)
       formData.append("userId", user.id);
 
       if (document) {
         formData.append("document", document);
       }
 
-  await axios.post("http://localhost:8080/api/shops", formData);
+      await axios.post("http://localhost:8080/api/shops", formData);
 
       alert("Shop registered successfully! Waiting for admin approval.");
-      window.location.href = "/shopkeeper-subscription";
+
+      // ✅ Refresh to show status instead of form
+      window.location.reload();
+
     } catch (err) {
       alert("Error: " + (err.response?.data || err.message));
     }
   };
 
+  // ✅ LOADING STATE
+  if (loading) {
+    return <p className="text-center mt-10">Loading...</p>;
+  }
+
+  // ✅ SHOW STATUS IF SHOP EXISTS
+  if (existingShop) {
+    return (
+      <div className="max-w-xl mx-auto bg-white p-6 mt-10 rounded shadow">
+        <h2 className="text-2xl font-bold mb-4">Shop Status</h2>
+
+        <div className="p-4 border rounded">
+          <h3 className="font-bold text-lg">
+            {existingShop.shopName}
+          </h3>
+          <p className="text-gray-600">{existingShop.category}</p>
+
+          <span
+            className={`mt-3 inline-block px-4 py-1 rounded text-sm font-semibold ${
+              existingShop.registrationStatus === "APPROVED"
+                ? "bg-green-100 text-green-700"
+                : existingShop.registrationStatus === "PENDING"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-red-100 text-red-700"
+            }`}
+          >
+            {existingShop.registrationStatus}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ SHOW FORM IF NO SHOP
   return (
     <div className="max-w-xl mx-auto bg-white p-6 mt-10 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Register Your Shop</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Shop Name */}
+
         <input
           name="name"
           placeholder="Shop Name"
@@ -72,7 +124,6 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        {/* Address */}
         <input
           name="address"
           placeholder="Address"
@@ -82,7 +133,6 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        {/* Category */}
         <input
           name="category"
           placeholder="Category (Food, Clothing, etc.)"
@@ -92,7 +142,6 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        {/* Phone */}
         <input
           name="phone"
           placeholder="Contact Number"
@@ -102,7 +151,6 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        {/* Email */}
         <input
           name="email"
           placeholder="Shop Email (optional)"
@@ -111,7 +159,6 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        {/* Description */}
         <textarea
           name="description"
           placeholder="Description"
@@ -120,7 +167,6 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        {/* Document Upload */}
         <div>
           <label className="block mb-1 font-semibold">
             Upload Shop Document (License / GST / Proof)
@@ -142,4 +188,4 @@ const RegisterShop = () => {
   );
 };
 
-export default RegisterShop; 
+export default RegisterShop;

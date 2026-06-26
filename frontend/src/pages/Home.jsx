@@ -11,6 +11,8 @@ import { useStats } from '../store/stats';
 import { useMemo } from 'react';
 import { isAdmin, isShopkeeper } from '../utils/roles';
 import { createApi } from '../api/client';
+import { getShopImage, DEFAULT_IMAGES } from '../utils/images.js';
+import SafeImage from '../components/SafeImage.jsx';
 
 function LoggedInHome({ user }) {
   const userIsAdmin = isAdmin(user);
@@ -38,7 +40,7 @@ function LoggedInHome({ user }) {
     console.log('Active filters:', activeFilters);
   };
 
-  return (
+   return (
     <div className="w-full">
       <div className="space-y-12">
         {/* Enhanced Welcome Header */}
@@ -306,9 +308,12 @@ function LoggedInHome({ user }) {
             <div className="grid md:grid-cols-3 gap-6">
               {stats.savedShops.slice(0, 6).map((s) => (
                 <div key={s.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
-                  {(s.image_url || s.logo || s.shopImage) && (
-                    <img src={s.image_url || s.logo || s.shopImage} alt={s.name || s.shopName} className="w-full h-48 object-cover" />
-                  )}
+                  <SafeImage
+                    src={s?.image_url || s?.logo || s?.shopImage || s?.imageUrl}
+                    alt={s.name || s.shopName}
+                    fallback={DEFAULT_IMAGES.shop}
+                    className="w-full h-48 object-cover"
+                  />
                   <div className="p-5">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{s.name || s.shopName}</h3>
                     <p className="text-sm text-gray-600 mb-2">{s.description || 'No description.'}</p>

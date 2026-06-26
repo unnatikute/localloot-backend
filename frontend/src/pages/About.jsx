@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { Code2, Database, Palette, Zap } from "lucide-react";
+import { DEFAULT_IMAGES } from "../utils/images.js";
+import SafeImage from "../components/SafeImage.jsx";
 
 export default function About() {
   const team = [
@@ -31,7 +33,7 @@ export default function About() {
       color: "from-yellow-500 to-orange-600",
       bgColor: "bg-yellow-50",
       borderColor: "border-yellow-200",
-      img: "https://i.pravatar.cc/150?img=12",
+      img: '/assets/team/unnati.png',
     },
     {
       name: "Nikita Nijave",
@@ -46,7 +48,7 @@ export default function About() {
       color: "from-green-500 to-emerald-600",
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
-      img: "https://i.pravatar.cc/150?img=32",
+      img:  '/assets/team/nikita.jpg',
     },
     {
       name: "Vaishnavi Kadam",
@@ -61,7 +63,7 @@ export default function About() {
       color: "from-purple-500 to-pink-600",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-200",
-      img: "https://i.pravatar.cc/150?img=5",
+      img: '/assets/team/vaishnavi.jpeg',
     },
   ];
 
@@ -139,9 +141,10 @@ export default function About() {
                     {/* Profile Image with Animation */}
                     <div className="mb-4 relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-transparent to-gray-900 rounded-2xl opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                      <img
+                      <SafeImage
                         src={member.img}
                         alt={member.name}
+                        fallback={DEFAULT_IMAGES.avatar}
                         className="w-33 h-33 rounded-2xl object-cover shadow-lg transform group-hover:scale-110 transition-all duration-300 mx-auto"
                       />
                     </div>

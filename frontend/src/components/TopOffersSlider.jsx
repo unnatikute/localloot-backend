@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useApi } from "../api/client";
+import { normalizeOffer, DEFAULT_IMAGES } from "../utils/images.js";
+import SafeImage from "./SafeImage.jsx";
 
 // Demo data for top 5 offers
 const DEMO_TOP_OFFERS = [
@@ -11,14 +13,14 @@ const DEMO_TOP_OFFERS = [
     description:
       "Amazing deal on all pizzas at Pizza Palace - Fresh, Hot & Delicious",
     image_url:
-      "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1200&auto=format&fit=crop",
+      "https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg",
     discount: 50,
     price: 499,
     is_trending: true,
     shop: {
       id: 1,
       name: "Pizza Palace",
-      logo: "https://images.unsplash.com/photo-1555939594-58d7cb561cea?q=80&w=100&auto=format&fit=crop",
+      logo: "https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg",
       area: "Downtown",
     },
   },
@@ -28,14 +30,14 @@ const DEMO_TOP_OFFERS = [
     description:
       "Exclusive collection of Designer Dresses - Latest Fashion Trends",
     image_url:
-      "https://images.unsplash.com/photo-1595777712802-66d0c38e90a1?q=80&w=1200&auto=format&fit=crop",
+      "https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg",
     discount: 60,
     price: 2999,
     is_trending: true,
     shop: {
       id: 2,
       name: "Fashion Fiesta",
-      logo: "https://images.unsplash.com/photo-1506755855726-8ab0a63a4a1c?q=80&w=100&auto=format&fit=crop",
+      logo: "https://images.pexels.com/photos/1884584/pexels-photo-1884584.jpeg",
       area: "Mall Road",
     },
   },
@@ -44,14 +46,14 @@ const DEMO_TOP_OFFERS = [
     title: "Buy 1 Get 1 FREE on Coffee",
     description: "Hot & Fresh Coffee with Free Pastries - Limited Time Offer",
     image_url:
-      "https://images.unsplash.com/photo-1559056199-641a0ac8b3f4?q=80&w=1200&auto=format&fit=crop",
+      "https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg",
     discount: 50,
     price: 150,
     is_trending: true,
     shop: {
       id: 3,
       name: "Coffee Brew Co.",
-      logo: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=100&auto=format&fit=crop",
+      logo: "https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg",
       area: "City Center",
     },
   },
@@ -60,14 +62,14 @@ const DEMO_TOP_OFFERS = [
     title: "Smart Watches - 45% OFF",
     description: "Latest SmartWatch Technology - Fitness & Health Tracking",
     image_url:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop",
+      "https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg",
     discount: 45,
     price: 8999,
     is_trending: true,
     shop: {
       id: 4,
       name: "Tech Hub",
-      logo: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=100&auto=format&fit=crop",
+      logo: "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg",
       area: "Tech Park",
     },
   },
@@ -76,14 +78,14 @@ const DEMO_TOP_OFFERS = [
     title: "Spa & Wellness - Upto 70% OFF",
     description: "Relaxing Spa Services - Massage, Facial & Complete Body Care",
     image_url:
-      "https://images.unsplash.com/photo-1544161515-81205f8991e2?q=80&w=1200&auto=format&fit=crop",
+      "https://images.pexels.com/photos/3997989/pexels-photo-3997989.jpeg",
     discount: 70,
     price: 1999,
     is_trending: true,
     shop: {
       id: 5,
       name: "Serenity Spa",
-      logo: "https://images.unsplash.com/photo-1576091160550-112173f7f869?q=80&w=100&auto=format&fit=crop",
+      logo: "https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg",
       area: "Wellness Zone",
     },
   },
@@ -103,10 +105,8 @@ export default function TopOffersSlider() {
           (response.data.offers || response.data.length > 0)
         ) {
           const raw = response.data.offers || response.data;
-          const normalized = raw.map((o) => ({
+          const normalized = raw.map((o) => normalizeOffer({
             ...o,
-            // Normalize backend field names to what the slider expects
-            image_url: o.image_url || o.imageUrl,
             discount:
               o.discount ||
               (o.originalPrice && o.price
@@ -166,12 +166,10 @@ export default function TopOffersSlider() {
       <div className="relative h-full">
         {/* Main Slide */}
         <div className="absolute inset-0 transition-all duration-500 ease-out">
-          <img
-            src={
-              currentOffer.image_url ||
-              "https://images.unsplash.com/photo-1516321318423-f06f70b504b5?q=80&w=1600&auto=format&fit=crop"
-            }
+          <SafeImage
+            src={currentOffer?.image_url || currentOffer?.imageUrl || currentOffer?.image}
             alt={currentOffer.title}
+            fallback={DEFAULT_IMAGES.offer}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
@@ -195,11 +193,10 @@ export default function TopOffersSlider() {
             {currentOffer.shop && (
               <div className="mb-6 flex items-center gap-3">
                 <div className="w-12 h-12 bg-white rounded-full overflow-hidden">
-                  <img
-                    src={
-                      currentOffer.shop.logo || "https://via.placeholder.com/48"
-                    }
+                  <SafeImage
+                    src={currentOffer.shop?.logo || currentOffer.shop?.shopImage || currentOffer.shop?.image_url}
                     alt={currentOffer.shop.name}
+                    fallback={DEFAULT_IMAGES.shopLogo}
                     className="w-full h-full object-cover"
                   />
                 </div>

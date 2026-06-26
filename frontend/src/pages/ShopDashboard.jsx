@@ -31,16 +31,8 @@ const ShopDashboard = () => {
     if (user?.id) {
       axios
         .get(`http://localhost:8080/api/offers/shopkeeper/${user.id}`)
-        .then((res) => {
-          const data = Array.isArray(res.data)
-            ? res.data.map((item) => item.offer || item)
-            : [];
-
-          setOffers(data);
-        })
-        .catch((err) => {
-          console.error("Error fetching offers:", err);
-        });
+        .then((res) => setOffers(res.data))
+        .catch((err) => console.log(err));
 
       axios
         .get(`http://localhost:8080/api/shops/by-user/${user.id}`)
@@ -90,8 +82,11 @@ const ShopDashboard = () => {
       formDataToSend.append("description", formData.description);
       formDataToSend.append("googleMapUrl", formData.googleMapUrl);
       formDataToSend.append("shopkeeperId", user.id);
+      formDataToSend.append("validFrom", formData.validFrom);
+formDataToSend.append("validUntil", formData.validUntil);
 
-      await axios.post(
+
+      const res = await axios.post(
         "http://localhost:8080/api/offers/create",
         formDataToSend,
         {
@@ -99,13 +94,26 @@ const ShopDashboard = () => {
         },
       );
 
-      alert("Offer submitted successfully!");
+      // ✅ Add new offer to UI instantly
+      const newOffer = {
+        ...res.data,
+        status: "PENDING", // default
+      };
+
+      setOffers([newOffer, ...offers]);
+
+      alert("Offer submitted! Status: PENDING");
+
       setShowForm(false);
-      window.location.reload();
     } catch (err) {
-      console.error(err);
-      alert("Error submitting offer");
-    }
+  console.error(err);
+
+  if (err.response?.data) {
+    alert(err.response.data);
+  } else {
+    alert("Error submitting offer");
+  }
+}
   };
 
   return (
@@ -190,14 +198,53 @@ const ShopDashboard = () => {
             onChange={(e) => setFormData({ ...formData, area: e.target.value })}
             required
           />
+         <div className="md:col-span-2">
+  <button
+    type="button"
+    className="bg-blue-600 text-white px-4 py-2 rounded"
+    onClick={() => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const coords = `${position.coords.latitude},${position.coords.longitude}`;
+
+          setFormData({
+            ...formData,
+            googleMapUrl: coords,
+          });
+
+          alert("Location captured successfully!");
+        },
+        (error) => {
+          alert("Unable to get location");
+          console.error(error);
+        }
+      );
+    }}
+  >
+    Get Current Location
+  </button>
+
+  {formData.googleMapUrl && (
+    <p className="mt-2 text-sm text-green-600">
+      Location: {formData.googleMapUrl}
+    </p>
+  )}
+</div>
           <input
-            type="text"
-            placeholder="Google Maps URL"
-            className="p-2 border rounded md:col-span-2"
-            onChange={(e) =>
-              setFormData({ ...formData, googleMapUrl: e.target.value })
-            }
-          />
+  type="datetime-local"
+  className="p-2 border rounded"
+  onChange={(e) =>
+    setFormData({ ...formData, validFrom: e.target.value })
+  }
+/>
+
+<input
+  type="datetime-local"
+  className="p-2 border rounded"
+  onChange={(e) =>
+    setFormData({ ...formData, validUntil: e.target.value })
+  }
+/>
           <input
             type="file"
             accept="image/*"
@@ -217,55 +264,41 @@ const ShopDashboard = () => {
       )}
 
       {/* ✅ OFFERS */}
-    <h2 className="text-xl font-semibold mb-4">My Offers Status</h2>
+      <h2 className="text-xl font-semibold mb-4">My Offers Status</h2>
 
-<div className="grid grid-cols-1 gap-4">
-  {offers.map((offer) => (
-    <div
-      key={offer.id}
-      className="border p-4 rounded flex justify-between items-center bg-white shadow-sm"
-    >
-      <div>
-        <h3 className="font-bold">{offer.title}</h3>
-        <p className="text-sm text-gray-600">
-          {offer.shopName} - {offer.area}
-        </p>
+      <div className="grid grid-cols-1 gap-4">
+        {offers.map((offer) => (
+          <div
+            key={offer.id}
+            className="border p-4 rounded flex justify-between items-center bg-white shadow-sm"
+          >
+            <div>
+              <h3 className="font-bold">{offer.title}</h3>
+              <p className="text-sm text-gray-600">
+                {offer.shopName} - {offer.area}
+              </p>
 
-        {offer.status === "PENDING" && (
-          <p className="text-xs text-gray-500 mt-1">
-            Waiting for admin approval
-          </p>
-        )}
+              {getValidityLabel(offer) && (
+                <p className="text-xs text-blue-600 mt-1">
+                  {getValidityLabel(offer)}
+                </p>
+              )}
+            </div>
 
-        {offer.status === "APPROVED" && (
-          <p className="text-xs text-green-600 mt-1">
-            Live and visible to users
-          </p>
-        )}
-
-        {offer.status === "REJECTED" && (
-          <p className="text-xs text-red-500 mt-1">
-            Offer was rejected
-          </p>
-        )}
+            <span
+              className={`px-3 py-1 rounded text-sm ${
+                offer.status === "APPROVED"
+                  ? "bg-green-100 text-green-700"
+                  : offer.status === "PENDING"
+                    ? "bg-yellow-100 text-yellow-700"
+                    : "bg-red-100 text-red-700"
+              }`}
+            >
+              {offer.status}
+            </span>
+          </div>
+        ))}
       </div>
-
-      <span
-        className={`px-3 py-1 rounded text-sm font-semibold ${
-          offer.status === "APPROVED"
-            ? "bg-green-100 text-green-700"
-            : offer.status === "PENDING"
-            ? "bg-yellow-100 text-yellow-700"
-            : "bg-red-100 text-red-700"
-        }`}
-      >
-        {offer.status}
-      </span>
-    </div>
-  ))}
-</div>
-
-    
     </div>
   );
 };

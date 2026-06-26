@@ -330,7 +330,12 @@ const ShopkeeperSubscription = () => {
                         {subscriptionInfo.subscription.endDate
                           ? new Date(
                               subscriptionInfo.subscription.endDate,
-                            ).toLocaleDateString()
+                            ).toLocaleDateString("en-IN", {
+                              timeZone: "Asia/Kolkata",
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })
                           : "N/A"}
                       </p>
                     </div>
@@ -463,6 +468,9 @@ const ShopkeeperSubscription = () => {
                     <p>
                       <strong>Yearly:</strong> {pkg.yearlyOfferLimit} offers - ₹
                       {pkg.yearlyPrice}
+                    </p>
+                    <p>
+                      <strong>Top Offer Limit:</strong> {pkg.topOffersAllowed}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -597,6 +605,26 @@ const ShopkeeperSubscription = () => {
                         <p className="text-sm text-gray-600">
                           {new Date(history.actionDate).toLocaleString()}
                         </p>
+                        <div className="space-y-1 text-sm text-gray-600 mt-2">
+  {history.offer?.description && <p>{history.offer.description}</p>}
+
+  {(history.offer?.startDate || history.offer?.endDate) && (
+    <p>
+      Valid:{" "}
+      {history.offer?.startDate
+        ? new Date(history.offer.startDate).toLocaleDateString("en-IN")
+        : "N/A"}{" "}
+      -{" "}
+      {history.offer?.endDate
+        ? new Date(history.offer.endDate).toLocaleDateString("en-IN")
+        : "N/A"}
+    </p>
+  )}
+
+  {history.offer?.discountValue && (
+    <p>Discount: {history.offer.discountValue}</p>
+  )}
+</div>
                       </div>
                       <span
                         className={`px-3 py-1 rounded text-sm font-semibold ${

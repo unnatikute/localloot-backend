@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useStats } from '../store/stats.jsx';
+import { DEFAULT_IMAGES } from '../utils/images.js';
+import SafeImage from './SafeImage.jsx';
 
 export default function OfferCard({ offer, onLike, onBookmark, linkState, isLiked, isBookmarked }) {
   const stats = useStats();
@@ -63,22 +65,21 @@ export default function OfferCard({ offer, onLike, onBookmark, linkState, isLike
     onBookmark?.();
   };
 
-  return (
+   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 flex flex-col">
-      {offer.image_url && (
-        <div className="relative">
-          <img
-            src={offer.image_url}
-            alt={offer.title}
-            className="w-full h-48 object-cover"
-          />
-          {offer.is_trending && (
+      <div className="relative">
+        <SafeImage
+          src={offer?.image_url || offer?.imageUrl || offer?.image}
+          alt={offer.title}
+          fallback={DEFAULT_IMAGES.offer}
+          className="w-full h-48 object-cover"
+        />
+        {offer.is_trending && (
             <span className="absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white shadow-lg">
               🔥 Trending
             </span>
           )}
         </div>
-      )}
       <div className="p-5 flex-1 flex flex-col">
         <div className="flex-1">
           <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{offer.title}</h3>

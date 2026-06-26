@@ -5,6 +5,8 @@ import TrendingBanner from "../components/TrendingBanner.jsx";
 import OfferCard from "../components/OfferCard.jsx";
 import AreaFilter from "../components/AreaFilter.jsx";
 import { useStats } from "../store/stats.jsx";
+import { getCategoryBanner, normalizeOffer, DEFAULT_IMAGES } from "../utils/images.js";
+import SafeImage from "../components/SafeImage.jsx";
 import { 
   validateSearchQuery, 
   sanitizeSearchInput, 
@@ -68,7 +70,7 @@ export default function Categories() {
   
   // Loading states
   const [loadingOffers, setLoadingOffers] = useState(false);
-  
+  const [selectedOffer, setSelectedOffer] = useState(null);
   const stats = useStats();
 
   // Hardcoded areas as fallback
@@ -470,8 +472,8 @@ export default function Categories() {
           {
             id: "mock-offer-1",
             title: "Buy 1 Get 1 Free on Thali",
-            description: `Pune: Koregaon Park - Valid on all Maharashtrian thalis. Offer valid till month end.`,
-            image_url: "https://images.unsplash.com/photo-1550547660-8b00a1b7537f?q=80&w=800&auto=format&fit=crop",
+            description: "Pune: Koregaon Park - Valid on all Maharashtrian thalis. Offer valid till month end.",
+            image_url: "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg",
             is_trending: true,
             shop: mockShops[0],
             categoryId: selectedCategory.id,
@@ -483,8 +485,8 @@ export default function Categories() {
           {
             id: "mock-offer-2",
             title: "50% Off on Large Pizzas",
-            description: `Pune: Wakad - Weekend special on all large pizzas. Dine-in and delivery.`,
-            image_url: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop",
+            description: "Pune: Wakad - Weekend special on all large pizzas. Dine-in and delivery.",
+            image_url: "https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg",
             is_trending: true,
             shop: mockShops[1],
             categoryId: selectedCategory.id,
@@ -496,8 +498,8 @@ export default function Categories() {
           {
             id: "mock-offer-3",
             title: "Flat ₹100 Off on Coffee Combos",
-            description: `Pune: Hinjewadi - On all coffee and snack combos. Valid all day.`,
-            image_url: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
+            description: "Pune: Hinjewadi - On all coffee and snack combos. Valid all day.",
+            image_url: "https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg",
             is_trending: false,
             shop: mockShops[2],
             categoryId: selectedCategory.id,
@@ -509,8 +511,8 @@ export default function Categories() {
           {
             id: "mock-offer-4",
             title: "30% Off on South Indian Breakfast",
-            description: `Pune: Shivajinagar - Morning special from 8 AM to 11 AM. All items included.`,
-            image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop",
+            description: "Pune: Shivajinagar - Morning special from 8 AM to 11 AM. All items included.",
+            image_url: "https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg",
             is_trending: true,
             shop: mockShops[3],
             categoryId: selectedCategory.id,
@@ -522,8 +524,8 @@ export default function Categories() {
           {
             id: "mock-offer-5",
             title: "Upto 70% Off on Summer Collection",
-            description: `Pune: Baner - Massive discount on all summer wear. Limited stock.`,
-            image_url: "https://images.unsplash.com/photo-1445205171083-17446d7c36f1?q=80&w=800&auto=format&fit=crop",
+            description: "Pune: Baner - Massive discount on all summer wear. Limited stock.",
+            image_url: "https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg",
             is_trending: true,
             shop: mockShops[4],
             categoryId: selectedCategory.id,
@@ -535,8 +537,8 @@ export default function Categories() {
           {
             id: "mock-offer-6",
             title: "Buy 2 Get 1 Free on T-Shirts",
-            description: `Pune: Kothrud - Spicy & Tasty Food`,
-            image_url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop",
+            description: "Pune: Kothrud - Trendy T-Shirts for Men & Women.",
+            image_url: "https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg",
             is_trending: false,
             shop: mockShops[5],
             categoryId: selectedCategory.id,
@@ -555,7 +557,7 @@ export default function Categories() {
         }
 
         if (!mounted) return;
-        const processed = applyFiltersAndSort(filteredOffers);
+        const processed = applyFiltersAndSort(filteredOffers.map(normalizeOffer));
         setTrending(processed.filter((m) => m.is_trending));
         setTopOffers(processed.slice(0, 3));
         setOffers(processed);
@@ -576,7 +578,7 @@ export default function Categories() {
         const topData = Array.isArray(top.data) ? top.data : [];
         const offersData = Array.isArray(o.data) ? o.data : [];
         
-        const processed = applyFiltersAndSort(offersData);
+        const processed = applyFiltersAndSort(offersData.map(normalizeOffer));
         setTrending(processed.filter((m) => m.is_trending));
         setTopOffers(processed.slice(0, 3));
         setOffers(processed);
@@ -1025,18 +1027,14 @@ export default function Categories() {
                 }`}
                 title={c.name}
               >
-                {c.banner_image_url && (
-                  <div className="h-24 w-full overflow-hidden">
-                    <img
-                      src={c.banner_image_url}
-                      alt={c.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = "https://via.placeholder.com/400x300?text=Category";
-                      }}
-                    />
-                  </div>
-                )}
+                <div className="h-24 w-full overflow-hidden">
+                  <SafeImage
+                    src={getCategoryBanner(c)}
+                    alt={c.name}
+                    fallback={DEFAULT_IMAGES.category}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div
                   className={`p-3 text-center ${
                     selectedCategory?.id === c.id
@@ -1065,7 +1063,7 @@ export default function Categories() {
       {/* Selected Category Banner */}
       {selectedCategory && (
         <TrendingBanner
-          image={selectedCategory.banner_image_url}
+          image={getCategoryBanner(selectedCategory)}
           title={`${selectedCategory.name} - Best Offers${
             areaId
               ? ` in ${areas.find((a) => a.id.toString() === areaId)?.name || "Selected Area"}`

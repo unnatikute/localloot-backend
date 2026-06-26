@@ -3,6 +3,9 @@ import { useParams, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../store/auth.jsx";
 import { createApi } from "../api/client.js";
 import { useStats } from "../store/stats.jsx";
+import { normalizeOffer, DEFAULT_IMAGES } from "../utils/images.js";
+import SafeImage from "../components/SafeImage.jsx";
+
 
 export default function OfferDetail() {
   const { offerId } = useParams();
@@ -109,7 +112,6 @@ export default function OfferDetail() {
   }
 
   if (!offer) {
-  
     return (
       <div className="text-center py-12">
         <p className="text-gray-600 text-lg">Offer not found</p>
@@ -127,9 +129,9 @@ export default function OfferDetail() {
 
   const hasMap = offer?.googleMapUrl;
 
-const mapEmbedUrl = hasMap
-  ? `https://www.google.com/maps?q=${encodeURIComponent(offer.googleMapUrl)}&output=embed`
-  : null;
+  const mapEmbedUrl = hasMap
+    ? `https://maps.google.com/maps?q=${offer.googleMapUrl}&z=15&output=embed`
+    : null;
 
   return (
     <div className="space-y-6">
@@ -145,16 +147,15 @@ const mapEmbedUrl = hasMap
         <span className="text-gray-900">{offer.title}</span>
       </nav>
 
-      <div className="grid md:grid-cols-3 gap-6">
+       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            {offer.imageUrl && (
-              <img
-                src={offer.imageUrl}
-                alt={offer.title}
-                className="w-full h-96 object-cover"
-              />
-            )}
+            <SafeImage
+              src={offer?.image_url || offer?.imageUrl || offer?.image}
+              alt={offer.title}
+              fallback={DEFAULT_IMAGES.offer}
+              className="w-full h-96 object-cover"
+            />
             <div className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -241,13 +242,12 @@ const mapEmbedUrl = hasMap
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-xl font-bold mb-4">Shop Details</h3>
               <div className="space-y-4">
-                {shop.image_url && (
-                  <img
-                    src={shop.image_url}
-                    alt={shop.name}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                )}
+                <SafeImage
+                  src={shop?.image_url || shop?.logo || shop?.shopImage || shop?.imageUrl}
+                  alt={shop.name}
+                  fallback={DEFAULT_IMAGES.shop}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
                 <div>
                   <Link
                     to={`/shops/${shop.id}`}
