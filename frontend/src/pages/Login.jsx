@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../store/auth.jsx";
-import axios from "axios";
+import { createApi } from "../api/client.js";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -35,9 +35,9 @@ export default function Login() {
         navigate("/");
         return;
       }
-
+      const api = createApi();
       // ✅ NORMAL BACKEND LOGIN
-      const response = await axios.post("/api/auth/login", {
+      const response = await api.post("/auth/login", {
         email,
         password,
       });
