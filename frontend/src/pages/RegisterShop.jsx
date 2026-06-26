@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useApi } from "../api"; // ✅ use hook-based API (no localhost risk)
 
 const RegisterShop = () => {
+  const api = useApi(); // ✅ correct usage
+
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [form, setForm] = useState({
@@ -15,17 +17,16 @@ const RegisterShop = () => {
 
   const [document, setDocument] = useState(null);
 
-  // ✅ NEW STATES
   const [existingShop, setExistingShop] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ CHECK IF SHOP EXISTS
+  // CHECK IF SHOP EXISTS
   useEffect(() => {
     if (user?.id) {
-      axios
-        .get(`http://localhost:8080/api/shops/by-user/${user.id}`)
+      api
+        .get(`/shops/by-user/${user.id}`)
         .then((res) => {
-          if (res.data.length > 0) {
+          if (res.data?.length > 0) {
             setExistingShop(res.data[0]);
           }
         })
@@ -63,33 +64,27 @@ const RegisterShop = () => {
         formData.append("document", document);
       }
 
-      await axios.post("http://localhost:8080/api/shops", formData);
+      await api.post("/shops", formData); // ✅ FIXED (await added)
 
       alert("Shop registered successfully! Waiting for admin approval.");
 
-      // ✅ Refresh to show status instead of form
       window.location.reload();
-
     } catch (err) {
       alert("Error: " + (err.response?.data || err.message));
     }
   };
 
-  // ✅ LOADING STATE
   if (loading) {
     return <p className="text-center mt-10">Loading...</p>;
   }
 
-  // ✅ SHOW STATUS IF SHOP EXISTS
   if (existingShop) {
     return (
       <div className="max-w-xl mx-auto bg-white p-6 mt-10 rounded shadow">
         <h2 className="text-2xl font-bold mb-4">Shop Status</h2>
 
         <div className="p-4 border rounded">
-          <h3 className="font-bold text-lg">
-            {existingShop.shopName}
-          </h3>
+          <h3 className="font-bold text-lg">{existingShop.shopName}</h3>
           <p className="text-gray-600">{existingShop.category}</p>
 
           <span
@@ -108,13 +103,11 @@ const RegisterShop = () => {
     );
   }
 
-  // ✅ SHOW FORM IF NO SHOP
   return (
     <div className="max-w-xl mx-auto bg-white p-6 mt-10 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Register Your Shop</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         <input
           name="name"
           placeholder="Shop Name"
@@ -135,7 +128,7 @@ const RegisterShop = () => {
 
         <input
           name="category"
-          placeholder="Category (Food, Clothing, etc.)"
+          placeholder="Category"
           value={form.category}
           onChange={handleChange}
           required
@@ -167,18 +160,13 @@ const RegisterShop = () => {
           className="w-full border p-2"
         />
 
-        <div>
-          <label className="block mb-1 font-semibold">
-            Upload Shop Document (License / GST / Proof)
-          </label>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            accept=".jpg,.jpeg,.png,.pdf"
-            required
-            className="w-full border p-2"
-          />
-        </div>
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept=".jpg,.jpeg,.png,.pdf"
+          required
+          className="w-full border p-2"
+        />
 
         <button className="w-full bg-blue-600 text-white py-2 rounded">
           Register Shop
