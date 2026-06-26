@@ -259,7 +259,7 @@ public ResponseEntity<?> rejectOffer(@PathVariable Long id) {
 
     /**
      * Get all users with optional role filter
-     */
+     */      
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(
             @RequestParam(required = false) String role,
