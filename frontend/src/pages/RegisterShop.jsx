@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useApi } from "../api"; // ✅ use hook-based API (no localhost risk)
+import { useApi } from "../api/client"; 
 
 const RegisterShop = () => {
   const api = useApi(); // ✅ correct usage
