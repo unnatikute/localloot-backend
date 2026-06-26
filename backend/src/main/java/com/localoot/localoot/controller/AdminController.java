@@ -255,6 +255,18 @@ public ResponseEntity<?> rejectOffer(@PathVariable Long id) {
 
     return ResponseEntity.notFound().build();
 }
+
+@GetMapping("/test-email")
+public ResponseEntity<String> testEmail() {
+
+    emailService.sendMail(
+            "your_personal_email@gmail.com",   // change this
+            "Test Email from Render",
+            "Hello! If you receive this, SendGrid is working correctly."
+    );
+
+    return ResponseEntity.ok("Email trigger sent");
+}
     // ============= USER ENDPOINTS =============
 
     /**
