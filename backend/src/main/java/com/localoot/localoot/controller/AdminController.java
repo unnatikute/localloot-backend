@@ -260,7 +260,7 @@ public ResponseEntity<?> rejectOffer(@PathVariable Long id) {
 public ResponseEntity<String> testEmail() {
 
     emailService.sendMail(
-            "your_personal_email@gmail.com",   // change this
+            "unnatikute@gmail.com",   // change this
             "Test Email from Render",
             "Hello! If you receive this, SendGrid is working correctly."
     );
